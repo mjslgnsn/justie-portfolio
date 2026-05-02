@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Unbounded:wght@200;400;600;800&display=swap" rel="stylesheet">
+  <title>What's New — Portfolio</title>
+  <style>
+    :root {
+      --hue: 255;
+      --first-color: hsl(var(--hue), 60%, 64%);
+      --first-color-alt: hsl(var(--hue), 80%, 56%);
+      --first-color-light: hsl(var(--hue), 60%, 74%);
+      --title-color: hsl(240, 8%, 95%);
+      --text-color: hsl(240, 8%, 70%);
+      --text-color-light: hsl(240, 8%, 50%);
+      --body-color: hsl(240, 100%, 2%);
+      --container-color: hsl(240, 8%, 6%);
+      --border-color: hsl(240, 8%, 12%);
+      --body-font: "Montserrat", sans-serif;
+      --second-font: "Unbounded", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body-font);
+      background-color: var(--body-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      background: hsla(240, 100%, 2%, 0.7);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header__logo {
+      font-family: var(--second-font);
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--first-color);
+      letter-spacing: 0.05em;
+    }
+
+    .header__nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .header__nav a {
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color .3s;
+    }
+
+    .header__nav a:hover { color: var(--first-color); }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      letter-spacing: 0.05em;
+      transition: color .3s;
+    }
+
+    .back-btn:hover { color: var(--first-color); }
+    .back-btn i { font-size: 1rem; }
+
+    /* ===== HERO ===== */
+    .blog-hero {
+      padding: 10rem 2rem 5rem;
+      max-width: 1120px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .68rem;
+      font-family: var(--second-font);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--first-color);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp .8s .2s forwards;
+    }
+
+    .hero-eyebrow::before {
+      content: '✦';
+      font-size: .6rem;
+    }
+
+    .blog-hero-title {
+      font-family: var(--second-font);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 800;
+      color: var(--title-color);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      opacity: 0;
+      animation: fadeUp .9s .35s forwards;
+    }
+
+    .blog-hero-title span {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--first-color);
+    }
+
+    .blog-hero-sub {
+      margin-top: 1.5rem;
+      font-size: .95rem;
+      line-height: 1.8;
+      color: var(--text-color);
+      max-width: 520px;
+      opacity: 0;
+      animation: fadeUp .8s .5s forwards;
+    }
+
+    /* ===== FILTER TABS ===== */
+    .filter-wrap {
+      padding: 0 2rem 3rem;
+      max-width: 1120px;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeUp .8s .65s forwards;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: .5rem 1.2rem;
+      border-radius: 100px;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--text-color);
+      transition: all .3s;
+      font-family: var(--body-font);
+    }
+
+    .filter-tab:hover,
+    .filter-tab.active {
+      background: var(--first-color);
+      border-color: var(--first-color);
+      color: #fff;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* Year Group */
+    .year-group { margin-bottom: 5rem; }
+
+    .year-label {
+      font-family: var(--second-font);
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      font-weight: 800;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--border-color);
+      line-height: 1;
+      margin-bottom: 3rem;
+      letter-spacing: -0.04em;
+      user-select: none;
+    }
+
+    .entries-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .entries-list::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--first-color), transparent);
+    }
+
+    /* ===== ENTRY CARD ===== */
+    .entry-card {
+      position: relative;
+      background: var(--container-color);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color .4s, transform .4s;
+      cursor: pointer;
+    }
+
+    .entry-card::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem; top: 2rem;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--first-color);
+      border: 2px solid var(--body-color);
+      box-shadow: 0 0 0 4px hsla(var(--hue), 60%, 64%, 0.2);
+    }
+
+    .entry-card:hover {
+      border-color: var(--first-color);
+      transform: translateX(6px);
+    }
+
+    .entry-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .entry-meta {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+
+    .entry-date {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-color-light);
+    }
+
+    .entry-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .25rem .75rem;
+      border-radius: 100px;
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .badge--milestone {
+      background: hsla(var(--hue), 60%, 64%, 0.15);
+      color: var(--first-color);
+      border: 1px solid hsla(var(--hue), 60%, 64%, 0.3);
+    }
+
+    .badge--update {
+      background: hsla(220, 80%, 60%, 0.15);
+      color: hsl(220, 80%, 70%);
+      border: 1px solid hsla(220, 80%, 60%, 0.3);
+    }
+
+    .badge--life {
+      background: hsla(140, 60%, 55%, 0.15);
+      color: hsl(140, 60%, 65%);
+      border: 1px solid hsla(140, 60%, 55%, 0.3);
+    }
+
+    .badge--new {
+      background: hsla(35, 90%, 60%, 0.15);
+      color: hsl(35, 90%, 65%);
+      border: 1px solid hsla(35, 90%, 60%, 0.3);
+    }
+
+    .entry-new-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .2rem .6rem;
+      background: var(--first-color);
+      border-radius: 100px;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 hsla(var(--hue), 60%, 64%, 0.4); }
+      50% { box-shadow: 0 0 0 6px hsla(var(--hue), 60%, 64%, 0); }
+    }
+
+    .entry-title {
+      font-family: var(--second-font);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--title-color);
+      line-height: 1.3;
+      margin-bottom: .75rem;
+    }
+
+    .entry-body {
+      font-size: .88rem;
+      line-height: 1.8;
+      color: var(--text-color);
+    }
+
+    /* Featured Entry */
+    .entry-card--featured {
+      background: linear-gradient(135deg, hsl(var(--hue), 20%, 8%), var(--container-color));
+      border-color: hsla(var(--hue), 60%, 64%, 0.3);
+    }
+
+    /* Entry with image */
+    .entry-image {
+      margin-top: 1.5rem;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .entry-image img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      transition: transform .5s ease;
+    }
+
+    .entry-card:hover .entry-image img { transform: scale(1.03); }
+
+    /* Entry with links */
+    .entry-links {
+      display: flex;
+      gap: .75rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .entry-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--first-color);
+      border: 1px solid hsla(var(--hue), 60%, 64%, 0.3);
+      padding: .4rem .9rem;
+      border-radius: 100px;
+      transition: all .3s;
+    }
+
+    .entry-link:hover {
+      background: hsla(var(--hue), 60%, 64%, 0.15);
+    }
+
+    .entry-link i { font-size: .9rem; }
+
+    /* Entry tags */
+    .entry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1.25rem;
+    }
+
+    .entry-tag {
+      font-size: .68rem;
+      font-weight: 500;
+      color: var(--text-color-light);
+      padding: .2rem .7rem;
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+    }
+
+    /* ===== TWO-COL LAYOUT FOR LARGE ENTRIES ===== */
+    @media (min-width: 768px) {
+      .entry-card--wide .entry-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        align-items: start;
+      }
+
+      .entry-card--wide .entry-image {
+        margin-top: 0;
+      }
+    }
+
+    /* ===== NEWSLETTER / CTA ===== */
+    .cta-section {
+      max-width: 1120px;
+      margin: 0 auto 6rem;
+      padding: 0 2rem;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, hsl(var(--hue), 30%, 8%), hsl(var(--hue), 20%, 5%));
+      border: 1px solid hsla(var(--hue), 60%, 64%, 0.2);
+      border-radius: 20px;
+      padding: 3.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, hsla(var(--hue), 60%, 64%, 0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: var(--second-font);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--title-color);
+      margin-bottom: .75rem;
+    }
+
+    .cta-sub {
+      font-size: .9rem;
+      color: var(--text-color);
+      margin-bottom: 2rem;
+    }
+
+    .cta-input-wrap {
+      display: flex;
+      gap: .75rem;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .cta-input {
+      flex: 1;
+      padding: .75rem 1.25rem;
+      background: var(--container-color);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      color: var(--title-color);
+      font-family: var(--body-font);
+      font-size: .85rem;
+      outline: none;
+      transition: border-color .3s;
+    }
+
+    .cta-input:focus { border-color: var(--first-color); }
+    .cta-input::placeholder { color: var(--text-color-light); }
+
+    .cta-btn {
+      padding: .75rem 1.5rem;
+      background: var(--first-color);
+      border: none;
+      border-radius: 100px;
+      color: #fff;
+      font-family: var(--body-font);
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .3s;
+      white-space: nowrap;
+    }
+
+    .cta-btn:hover {
+      background: var(--first-color-alt);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px hsla(var(--hue), 60%, 64%, 0.35);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .78rem;
+      color: var(--text-color-light);
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== PROGRESS ===== */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--first-color), var(--first-color-light));
+      z-index: 200;
+      width: 0%;
+    }
+
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 3rem; height: 3rem;
+      border-radius: 50%;
+      background: var(--first-color);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .3s;
+      z-index: 50;
+    }
+
+    .scroll-top.show { opacity: 1; transform: translateY(0); }
+    .scroll-top:hover { background: var(--first-color-alt); }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Entry card link wrapper */
+    a.entry-card-link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .header__nav { display: none; }
+      .cta-input-wrap { flex-direction: column; }
+      .cta-box { padding: 2rem 1.5rem; }
+      .entries-list { padding-left: 1.5rem; }
+      .year-label { font-size: 3rem; }
+    }
+
+    /* ===== ENTRY CARD LINK WRAPPER ===== */
+    .entry-card-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .entry-card-link .entry-card {
+      transition: border-color .4s, transform .4s;
+    }
+
+    .entry-card-link:hover .entry-card {
+      border-color: var(--first-color);
+      transform: translateX(6px);
+    }
+
+    /* Disable the li-level hover since link wrapper handles it */
+    .entry-card-link + .entry-card:hover,
+    .entry-card-link .entry-card:hover {
+      border-color: var(--first-color);
+    }
+
+    /* Read more indicator */
+    .entry-read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      margin-top: 1.1rem;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--first-color);
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity .3s, transform .3s;
+    }
+
+    .entry-card-link:hover .entry-read-more {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="../../index.html" class="header__logo">Justie</a>
+    <nav class="header__nav">
+      <a href="../../index.html">Home</a>
+      <a href="../../index.html#projects">Projects</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+    <a href="../../index.html" class="back-btn">
+      <i class="ri-arrow-left-line"></i> Back
+    </a>
+  </header>
+
+  <!-- Hero -->
+  <div class="blog-hero">
+    <p class="hero-eyebrow">What's New</p>
+    <h1 class="blog-hero-title">
+      Life Updates<br>
+      <span>&amp; Events</span>
+    </h1>
+    <p class="blog-hero-sub">
+      A running log of what's happening — milestones reached, projects shipped, things learned, and life lived.
+    </p>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-wrap">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="milestone">Milestone</button>
+      <button class="filter-tab" data-filter="update">Update</button>
+      <button class="filter-tab" data-filter="life">Life</button>
+      <button class="filter-tab" data-filter="new">New</button>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline-wrap">
+
+    <!-- 2026 -->
+    <div class="year-group">
+      <div class="year-label reveal">2026</div>
+
+      <ul class="entries-list">
+
+        <!-- Entry: Featured / Latest — Life -->
+        <li data-category="life" class="reveal">
+          <a href="blog-2026-internship.html" class="entry-card-link">
+            <div class="entry-card entry-card--featured entry-card--wide">
+              <div class="entry-inner">
+                <div>
+                  <div class="entry-header">
+                    <div class="entry-meta">
+                      <span class="entry-date">April 2026</span>
+                      <span class="entry-badge badge--life"><i class="ri-briefcase-line"></i> Life</span>
+                    </div>
+                    <span class="entry-new-pill">● New</span>
+                  </div>
+                  <h3 class="entry-title">JG Worldwide Internship — Stepping Into the Real World</h3>
+                  <p class="entry-body">
+                    Funny enough, this feels like 2023 again — parang freshman ulit — but this time, mas aware na ako. My internship at JG Worldwide taught me so much, not just about work but about myself. The people I met, the lessons I picked up… it made me realize I'm slowly stepping into the life I've been working hard for.
+                  </p>
+                  <div class="entry-tags">
+                    <span class="entry-tag">Internship</span>
+                    <span class="entry-tag">JG Worldwide</span>
+                    <span class="entry-tag">Growth</span>
+                  </div>
+                  <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+                </div>
+                <div class="entry-image">
+                  <img src="img/jgw.jpg" alt="JG Worldwide Internship">
+                </div>
+              </div>
+            </div>
+          </a>
+        </li>
+
+        <!-- Entry: Milestone — Graduation -->
+        <li data-category="milestone" class="reveal" style="transition-delay:.1s">
+          <a href="blog-2026-graduation.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2026</span>
+                  <span class="entry-badge badge--milestone"><i class="ri-graduation-cap-line"></i> Milestone</span>
+                </div>
+              </div>
+              <h3 class="entry-title">"Let's See Where This Goes" — Starting Again, But Stronger</h3>
+              <p class="entry-body">
+                Graduation? Sana. Malapit na. But for now, I'm just taking it one step at a time and trusting that I'm on the right path. This chapter feels like 2023 again — new, a little uncertain — but this time I know what I'm made of.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">What's Next</span>
+                <span class="entry-tag">Graduation</span>
+                <span class="entry-tag">New Chapter</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/grad.png" alt="Graduation">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- 2025 -->
+    <div class="year-group">
+      <div class="year-label reveal">2025</div>
+
+      <ul class="entries-list">
+
+        <!-- Entry: Life -->
+        <li data-category="life" class="reveal">
+          <a href="blog-2025-life.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2025</span>
+                  <span class="entry-badge badge--life"><i class="ri-heart-line"></i> Life</span>
+                </div>
+              </div>
+              <h3 class="entry-title">"Carrying More Than I Thought I Could"</h3>
+              <p class="entry-body">
+                This was the hardest year. I became Vice President and College Governor at the same time — nakakapagod, sobra. There were days I felt completely drained and overwhelmed, but at the same time, genuinely happy. I met people who made everything lighter — my "nakshie." They became part of my story in ways I didn't expect.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">Leadership</span>
+                <span class="entry-tag">Vice President</span>
+                <span class="entry-tag">College Governor</span>
+                <span class="entry-tag">Growth</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/gov.jpg" alt="Leadership and friendships">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+        <!-- Entry: Milestone — Gawad Batang Bayani -->
+        <li data-category="milestone" class="reveal" style="transition-delay:.1s">
+          <a href="blog-2025-gawad.html" class="entry-card-link">
+            <div class="entry-card entry-card--featured">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2025</span>
+                  <span class="entry-badge badge--milestone"><i class="ri-trophy-line"></i> Milestone</span>
+                </div>
+              </div>
+              <h3 class="entry-title">Most Active Governance Awardee — Gawad Batang Bayani 2025 🏆</h3>
+              <p class="entry-body">
+                Despite everything this year threw at me, our organization got recognized as Most Active Governance Awardee at Gawad Batang Bayani 2025. One of my proudest moments — proof that all the late nights, the events, the pressure, was absolutely worth it.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">Award</span>
+                <span class="entry-tag">Gawad Batang Bayani</span>
+                <span class="entry-tag">Student Governance</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/gawad.jpg" alt="Award ceremony">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+        <!-- Entry: Milestone — DOST Startup Incubation -->
+        <li data-category="milestone" class="reveal" style="transition-delay:.2s">
+          <a href="blog-2025-dost.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2025</span>
+                  <span class="entry-badge badge--milestone"><i class="ri-award-line"></i> Milestone</span>
+                </div>
+              </div>
+              <h3 class="entry-title">1st Place — DOST Startup Incubation 🥇</h3>
+              <p class="entry-body">
+                My team won 1st place in the DOST Startup Incubation program. Academically and competitively, this year gave me some of my most defining moments. Looking back — worth it lahat.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">DOST</span>
+                <span class="entry-tag">1st Place</span>
+                <span class="entry-tag">Startup</span>
+                <span class="entry-tag">Competition</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/sikat.png" alt="Startup competition">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- 2024 -->
+    <div class="year-group">
+      <div class="year-label reveal">2024</div>
+
+      <ul class="entries-list">
+
+        <!-- Entry: Life -->
+        <li data-category="life" class="reveal">
+          <a href="blog-2024-life.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2024</span>
+                  <span class="entry-badge badge--life"><i class="ri-seedling-line"></i> Life</span>
+                </div>
+              </div>
+              <h3 class="entry-title">"Learning to Show Up"</h3>
+              <p class="entry-body">
+                This year came with bigger responsibilities. I became a board member of our student council — grabe, it was challenging. New people, new environment, new expectations. There were moments I doubted myself, but I kept showing up anyway. I handled projects, hosted events, and even represented our college in competitions. Academics? Surviving, not perfect — but I'm proud I didn't quit.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">Student Council</span>
+                <span class="entry-tag">Board Member</span>
+                <span class="entry-tag">Leadership</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/board.jpg" alt="Student council meeting">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+        <!-- Entry: Milestone -->
+        <li data-category="milestone" class="reveal" style="transition-delay:.1s">
+          <a href="blog-2024-milestone.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2024</span>
+                  <span class="entry-badge badge--milestone"><i class="ri-medal-line"></i> Milestone</span>
+                </div>
+              </div>
+              <h3 class="entry-title">A Year of Showing Up — Representing the College</h3>
+              <p class="entry-body">
+                I grew so much this year. Beyond academics, I found myself representing our college in competitions and taking on more than I thought I was ready for. I'm just really grateful for every experience I got to have — even the hard ones.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">Competitions</span>
+                <span class="entry-tag">College Rep</span>
+                <span class="entry-tag">Gratitude</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/board2.jpg" alt="Competition event">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- 2023 -->
+    <div class="year-group">
+      <div class="year-label reveal">2023</div>
+
+      <ul class="entries-list">
+
+        <!-- Entry: Life -->
+        <li data-category="life" class="reveal">
+          <a href="blog-2023-life.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2023</span>
+                  <span class="entry-badge badge--life"><i class="ri-door-open-line"></i> Life</span>
+                </div>
+              </div>
+              <h3 class="entry-title">"Trying, Even When I'm Not Ready"</h3>
+              <p class="entry-body">
+                2023 felt like a fresh start. As a freshman, everything was new — and honestly, nakakatakot. But I chose to try anyway. I said yes to opportunities, joined activities, and slowly learned to step out of my comfort zone. Hindi siya madali, pero doon ko nakita na kaya ko pala.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">Freshman Year</span>
+                <span class="entry-tag">New Beginnings</span>
+                <span class="entry-tag">Courage</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/wem.png" alt="College campus life">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+        <!-- Entry: Milestone -->
+        <li data-category="milestone" class="reveal" style="transition-delay:.1s">
+          <a href="blog-2023-milestone.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">2023</span>
+                  <span class="entry-badge badge--milestone"><i class="ri-checkbox-circle-line"></i> Milestone</span>
+                </div>
+              </div>
+              <h3 class="entry-title">Making It Through — That Already Means Something</h3>
+              <p class="entry-body">
+                I won't say I had it all figured out, but I made it through. There were personal struggles along the way, but I didn't give up. May mga hard moments, but I kept going. And for me, that already means something.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">Resilience</span>
+                <span class="entry-tag">First Year</span>
+                <span class="entry-tag">Personal Growth</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/red.png" alt="Personal growth and resilience">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
+            </div>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-box reveal">
+      <h3 class="cta-title">Stay in the loop</h3>
+      <p class="cta-sub">Get notified when I post new updates, projects, or life events.</p>
+      <div class="cta-input-wrap">
+        <input type="email" class="cta-input" placeholder="your@email.com">
+        <button class="cta-btn">Notify Me</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>© 2026 Portfolio. All rights reserved.</span>
+    <span>Updated May 2025 ✦</span>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="ri-arrow-up-line"></i>
+  </button>
+
+  <script>
+    // Progress bar
+    window.addEventListener('scroll', () => {
+      const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('progressBar').style.width = scrolled + '%';
+      const btn = document.getElementById('scrollTop');
+      if (window.scrollY > 400) btn.classList.add('show');
+      else btn.classList.remove('show');
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // Filter tabs
+    const tabs = document.querySelectorAll('.filter-tab');
+    const cards = document.querySelectorAll('li[data-category]');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+
+        cards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = '';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            requestAnimationFrame(() => {
+              card.style.transition = 'opacity .5s ease, transform .5s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            });
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(10px)';
+            setTimeout(() => card.style.display = 'none', 300);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

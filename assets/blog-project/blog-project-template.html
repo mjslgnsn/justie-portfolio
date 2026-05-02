@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Unbounded:wght@200;400;600;800&display=swap" rel="stylesheet">
+  <title>Project Blog — Portfolio</title>
+  <style>
+    :root {
+      --hue: 255;
+      --first-color: hsl(var(--hue), 60%, 64%);
+      --first-color-alt: hsl(var(--hue), 80%, 56%);
+      --first-color-light: hsl(var(--hue), 60%, 74%);
+      --title-color: hsl(240, 8%, 95%);
+      --text-color: hsl(240, 8%, 70%);
+      --text-color-light: hsl(240, 8%, 50%);
+      --body-color: hsl(240, 100%, 2%);
+      --container-color: hsl(240, 8%, 6%);
+      --border-color: hsl(240, 8%, 12%);
+      --body-font: "Montserrat", sans-serif;
+      --second-font: "Unbounded", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body-font);
+      background-color: var(--body-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== NOISE OVERLAY ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      background: hsla(240, 100%, 2%, 0.7);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header__logo {
+      font-family: var(--second-font);
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--first-color);
+      letter-spacing: 0.05em;
+    }
+
+    .header__nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .header__nav a {
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color .3s;
+    }
+
+    .header__nav a:hover { color: var(--first-color); }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      letter-spacing: 0.05em;
+      transition: color .3s;
+    }
+
+    .back-btn:hover { color: var(--first-color); }
+    .back-btn i { font-size: 1rem; }
+
+    /* ===== HERO ===== */
+    .project-hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding-top: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, hsla(var(--hue), 60%, 64%, 0.12) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+
+    .hero-glow-2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, hsla(var(--hue), 80%, 56%, 0.08) 0%, transparent 70%);
+      bottom: 100px; left: -100px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 4rem 2rem 3rem;
+      max-width: 1120px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .project-category {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .7rem;
+      font-family: var(--second-font);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--first-color);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .8s .2s forwards;
+    }
+
+    .project-category::before {
+      content: '';
+      width: 2rem; height: 1px;
+      background: var(--first-color);
+    }
+
+    .project-hero-title {
+      font-family: var(--second-font);
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--title-color);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      max-width: 800px;
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp .9s .4s forwards;
+    }
+
+    .project-hero-title span { color: var(--first-color); }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .8s .6s forwards;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+    }
+
+    .hero-meta-label {
+      font-size: .65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-color-light);
+    }
+
+    .hero-meta-value {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--title-color);
+    }
+
+    .hero-divider {
+      width: 1px; height: 2.5rem;
+      background: var(--border-color);
+      align-self: center;
+    }
+
+    /* ===== HERO IMAGE ===== */
+    .hero-image-wrap {
+      position: relative;
+      width: 100%;
+      height: 55vh;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 1.2s .8s forwards;
+    }
+
+    .hero-image-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, var(--body-color) 100%);
+    }
+
+    .hero-image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+      animation: imgReveal 1.5s .8s forwards;
+    }
+
+    /* ===== PROJECT LINKS ===== */
+    .project-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: 0 2rem 3rem;
+      max-width: 1120px;
+      margin: 0 auto;
+      width: 100%;
+      opacity: 0;
+      animation: fadeUp .8s 1s forwards;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .75rem 1.5rem;
+      border-radius: 100px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: all .3s;
+      cursor: pointer;
+    }
+
+    .link-btn--primary {
+      background: var(--first-color);
+      color: #fff;
+    }
+
+    .link-btn--primary:hover {
+      background: var(--first-color-alt);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px hsla(var(--hue), 60%, 64%, 0.35);
+    }
+
+    .link-btn--outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+    }
+
+    .link-btn--outline:hover {
+      border-color: var(--first-color);
+      color: var(--first-color);
+      transform: translateY(-2px);
+    }
+
+    .link-btn i { font-size: 1rem; }
+
+    /* ===== MAIN CONTENT ===== */
+    .project-body {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* ===== SECTIONS ===== */
+    .content-section {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      padding: 5rem 0;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .content-section:first-child { border-top: none; }
+
+    .section-number {
+      font-family: var(--second-font);
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--first-color);
+      padding-top: .4rem;
+    }
+
+    .section-label {
+      font-family: var(--second-font);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--title-color);
+      margin-top: .5rem;
+      line-height: 1.3;
+    }
+
+    .section-text {
+      font-size: .93rem;
+      line-height: 1.85;
+      color: var(--text-color);
+    }
+
+    .section-text + .section-text { margin-top: 1rem; }
+
+    /* ===== TECH TAGS ===== */
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 1.5rem;
+    }
+
+    .tech-tag {
+      padding: .35rem .9rem;
+      border-radius: 100px;
+      border: 1px solid var(--border-color);
+      font-size: .72rem;
+      font-weight: 500;
+      color: var(--text-color);
+      background: var(--container-color);
+      transition: all .3s;
+    }
+
+    .tech-tag:hover {
+      border-color: var(--first-color);
+      color: var(--first-color);
+    }
+
+    /* ===== SECTION IMAGE ===== */
+    .section-image {
+      margin-top: 3rem;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border-color);
+    }
+
+    .section-image img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      transition: transform .6s ease;
+    }
+
+    .section-image:hover img { transform: scale(1.03); }
+
+    .section-image-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(to top, hsla(240, 100%, 2%, 0.9), transparent);
+      font-size: .75rem;
+      color: var(--text-color-light);
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== FULL SECTION IMAGE ===== */
+    .full-image-wrap {
+      margin: 4rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .full-image-wrap img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      transition: transform .8s ease;
+    }
+
+    .full-image-wrap:hover img { transform: scale(1.02); }
+
+    /* ===== STATS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      padding: 1.75rem;
+      background: var(--container-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      transition: border-color .3s;
+    }
+
+    .stat-card:hover { border-color: var(--first-color); }
+
+    .stat-number {
+      font-family: var(--second-font);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--first-color);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: .78rem;
+      color: var(--text-color-light);
+      margin-top: .5rem;
+      font-weight: 500;
+    }
+
+    /* ===== RELATED PROJECTS ===== */
+    .related-section {
+      padding-top: 5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .related-title {
+      font-family: var(--second-font);
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-color-light);
+      margin-bottom: 2rem;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .related-card {
+      background: var(--container-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all .4s;
+      cursor: pointer;
+    }
+
+    .related-card:hover {
+      border-color: var(--first-color);
+      transform: translateY(-4px);
+    }
+
+    .related-card-img {
+      height: 180px;
+      background: linear-gradient(135deg, hsl(var(--hue), 60%, 12%), hsl(var(--hue), 40%, 6%));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      overflow: hidden;
+    }
+
+    .related-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .related-card-info {
+      padding: 1.25rem;
+    }
+
+    .related-card-cat {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--first-color);
+      margin-bottom: .5rem;
+    }
+
+    .related-card-title {
+      font-family: var(--second-font);
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--title-color);
+      line-height: 1.3;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .78rem;
+      color: var(--text-color-light);
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* ===== KEYFRAMES ===== */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes imgReveal {
+      to { transform: scale(1); }
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--first-color), var(--first-color-light));
+      z-index: 200;
+      width: 0%;
+      transition: width .1s;
+    }
+
+    /* ===== SCROLL TO TOP ===== */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 3rem; height: 3rem;
+      border-radius: 50%;
+      background: var(--first-color);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .3s;
+      z-index: 50;
+    }
+
+    .scroll-top.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-top:hover { background: var(--first-color-alt); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .header__nav { display: none; }
+      .content-section {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .related-grid { grid-template-columns: 1fr; }
+      .project-hero-title { font-size: 1.6rem; }
+      .hero-image-wrap { height: 35vh; }
+    }
+
+    @media (min-width: 1150px) {
+      .project-body { padding: 0 0 6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="../../index.html" class="header__logo">Justie</a>
+    <nav class="header__nav">
+      <a href="../../index.html">Home</a>
+      <a href="../../index.html#projects">Projects</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+    <a href="../../index.html" class="back-btn">
+      <i class="ri-arrow-left-line"></i> Back
+    </a>
+  </header>
+
+  <!-- Hero -->
+  <section class="project-hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="hero-content">
+      <span class="project-category">Web Development</span>
+
+      <h1 class="project-hero-title">
+        COACH — College Outreach &amp;<br>
+        <span>Academic Collaboration Hub</span>
+      </h1>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Type</span>
+          <span class="hero-meta-value">Capstone Project</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Year</span>
+          <span class="hero-meta-value">2024</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Role</span>
+          <span class="hero-meta-value">Full-stack Developer</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Status</span>
+          <span class="hero-meta-value" style="color: hsl(140,60%,55%);">● Completed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-image-wrap">
+      <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1600&q=80" alt="Project Screenshot">
+    </div>
+  </section>
+
+  <!-- Links -->
+  <div class="project-links">
+    <a href="#" class="link-btn link-btn--primary">
+      <i class="ri-github-fill"></i> GitHub Repository
+    </a>
+    <a href="#" class="link-btn link-btn--outline">
+      <i class="ri-external-link-line"></i> Live Website
+    </a>
+    <a href="#" class="link-btn link-btn--outline">
+      <i class="ri-video-line"></i> Video Demo
+    </a>
+  </div>
+
+  <!-- Body -->
+  <div class="project-body">
+
+    <!-- Overview -->
+    <div class="content-section">
+      <div class="reveal-left">
+        <div class="section-number">01</div>
+        <div class="section-label">The Goal</div>
+      </div>
+      <div class="reveal">
+        <p class="section-text">
+          COACH is a web-based mentoring platform that connects Bataan Peninsula State University mentors with aspiring technology learners. The system provides a structured digital environment for mentorship, collaboration, and skill-based learning.
+        </p>
+        <p class="section-text">
+          The platform aims to support effective mentorship through organized sessions, learning resource sharing, and communication tools enhanced with automated SMS notifications for timely updates.
+        </p>
+
+        <div class="stats-grid" style="margin-top: 2.5rem;">
+          <div class="stat-card reveal">
+            <div class="stat-number">4.46</div>
+            <div class="stat-label">ISO/IEC 25010 Mean Score</div>
+          </div>
+          <div class="stat-card reveal" style="transition-delay: .1s;">
+            <div class="stat-number">4</div>
+            <div class="stat-label">User Roles Supported</div>
+          </div>
+          <div class="stat-card reveal" style="transition-delay: .2s;">
+            <div class="stat-number">99%</div>
+            <div class="stat-label">Uptime on DigitalOcean</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full Image -->
+    <div class="full-image-wrap reveal-scale">
+      <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1600&q=80" alt="Dashboard Preview">
+    </div>
+
+    <!-- Features -->
+    <div class="content-section">
+      <div class="reveal-left">
+        <div class="section-number">02</div>
+        <div class="section-label">Key Features &amp; Technology</div>
+      </div>
+      <div class="reveal">
+        <p class="section-text">
+          The platform includes role-based access for super administrators, moderators, mentors, and mentees. It supports mentorship scheduling with automated SMS, live video conferencing, and learning resource sharing.
+        </p>
+        <p class="section-text">
+          Discussion forums encourage collaborative learning, while feedback and progress tracking monitor user development. Administrative functions include system monitoring, user management, and report generation.
+        </p>
+
+        <div class="tech-tags">
+          <span class="tech-tag">PHP</span>
+          <span class="tech-tag">HTML & CSS</span>
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">MySQL</span>
+          <span class="tech-tag">XAMPP</span>
+          <span class="tech-tag">DigitalOcean</span>
+          <span class="tech-tag">Jitsi</span>
+          <span class="tech-tag">Semaphore SMS</span>
+          <span class="tech-tag">Twilio SendGrid</span>
+          <span class="tech-tag">GitHub</span>
+        </div>
+
+        <div class="section-image" style="margin-top: 2rem;">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80" alt="Feature Overview">
+          <div class="section-image-caption">System architecture overview</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="content-section">
+      <div class="reveal-left">
+        <div class="section-number">03</div>
+        <div class="section-label">The Result</div>
+      </div>
+      <div class="reveal">
+        <p class="section-text">
+          COACH was successfully developed and evaluated using the ISO/IEC 25010:2011 software quality standard. The system achieved a "Very Acceptable" rating with a 4.46 mean score.
+        </p>
+        <p class="section-text">
+          These results demonstrate strong performance across usability, reliability, performance efficiency, and security — indicating the platform effectively meets its intended goals and is suitable for real-world academic deployment.
+        </p>
+
+        <div class="section-image" style="margin-top: 2rem;">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" alt="Evaluation Results">
+          <div class="section-image-caption">Evaluation results dashboard</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Projects -->
+    <div class="related-section reveal">
+      <p class="related-title">Other Projects</p>
+      <div class="related-grid">
+        <a href="#" class="related-card">
+          <div class="related-card-img">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80" alt="">
+          </div>
+          <div class="related-card-info">
+            <div class="related-card-cat">Web App</div>
+            <div class="related-card-title">E-Commerce Platform with Payment Integration</div>
+          </div>
+        </a>
+        <a href="#" class="related-card">
+          <div class="related-card-img">
+            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80" alt="">
+          </div>
+          <div class="related-card-info">
+            <div class="related-card-cat">Mobile App</div>
+            <div class="related-card-title">Task Management Dashboard with Real-time Sync</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>© 2026 Portfolio. All rights reserved.</span>
+    <span>Built with passion ✦</span>
+  </footer>
+
+  <!-- Scroll Top -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="ri-arrow-up-line"></i>
+  </button>
+
+  <script>
+    // Progress bar
+    window.addEventListener('scroll', () => {
+      const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('progressBar').style.width = scrolled + '%';
+
+      // Scroll top btn
+      const btn = document.getElementById('scrollTop');
+      if (window.scrollY > 400) btn.classList.add('show');
+      else btn.classList.remove('show');
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJ | Welcome</title>
+    <style>
+        body { margin: 0; background: #030405; overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <script src="index/assets/js/loader.js"></script>
+
+    <script>
+        /**
+         * REDIRECT LOGIC
+         * We wait for the specific sequence time of your splash
+         * 3000ms (Liquid) + 1500ms (Splash & Text reveal)
+         */
+        setTimeout(() => {
+            // Change 'index.html' to the actual path of your home page
+            window.location.href = 'index/index.html';
+        }, 4500); 
+    </script>
+</body>
+</html>
