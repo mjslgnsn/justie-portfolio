@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Unbounded:wght@200;400;600;800&display=swap" rel="stylesheet">
+  <title>Being Me — A Pride Month Tribute</title>
+  <style>
+    :root {
+      --hue: 255;
+      --first-color: hsl(var(--hue), 60%, 64%);
+      --first-color-alt: hsl(var(--hue), 80%, 56%);
+      --first-color-light: hsl(var(--hue), 60%, 74%);
+      --title-color: hsl(240, 8%, 95%);
+      --text-color: hsl(240, 8%, 70%);
+      --text-color-light: hsl(240, 8%, 50%);
+      --body-color: hsl(240, 100%, 2%);
+      --container-color: hsl(240, 8%, 6%);
+      --border-color: hsl(240, 8%, 12%);
+      --body-font: "Montserrat", sans-serif;
+      --second-font: "Unbounded", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body-font);
+      background-color: var(--body-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--first-color), var(--first-color-light));
+      z-index: 200;
+      width: 0%;
+      transition: width .1s;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      background: hsla(240, 100%, 2%, 0.7);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header__logo {
+      font-family: var(--second-font);
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--first-color);
+      letter-spacing: 0.05em;
+    }
+
+    .header__nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .header__nav a {
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color .3s;
+    }
+
+    .header__nav a:hover { color: var(--first-color); }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      letter-spacing: 0.05em;
+      transition: color .3s;
+    }
+
+    .back-btn:hover { color: var(--first-color); }
+    .back-btn i { font-size: 1rem; }
+
+    /* ===== MAIN WRAPPER ===== */
+    .post-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 9rem 2rem 6rem;
+      position: relative;
+    }
+
+    /* ===== AMBIENT GLOW ===== */
+    .ambient-glow {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, hsla(var(--hue), 60%, 64%, 0.06), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-color-light);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp .7s .1s forwards;
+    }
+
+    .breadcrumb a { transition: color .3s; }
+    .breadcrumb a:hover { color: var(--first-color); }
+    .breadcrumb i { font-size: .7rem; }
+
+    /* ===== ENTRY META ROW ===== */
+    .post-meta-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      animation: fadeUp .7s .2s forwards;
+    }
+
+    .entry-date {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-color-light);
+    }
+
+    .entry-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .28rem .8rem;
+      border-radius: 100px;
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: hsla(140, 60%, 55%, 0.15);
+      color: hsl(140, 60%, 65%);
+      border: 1px solid hsla(140, 60%, 55%, 0.3);
+    }
+
+    .entry-badge--pride {
+      background: linear-gradient(90deg, hsla(0,85%,60%,.18), hsla(45,90%,58%,.18), hsla(140,60%,55%,.18), hsla(200,85%,60%,.18), hsla(265,70%,65%,.18));
+      color: hsl(320, 70%, 78%);
+      border: 1px solid hsla(320, 70%, 65%, 0.35);
+    }
+
+    .pride-rule {
+      height: 3px;
+      width: 100%;
+      border-radius: 100px;
+      margin: 2rem 0;
+      background: linear-gradient(90deg, #e0263f, #f6a723, #f6e13a, #3fae5b, #3d7dd6, #7b4fc9);
+      opacity: 0;
+      animation: fadeUp .8s .55s forwards;
+    }
+
+    .read-time {
+      font-size: .72rem;
+      letter-spacing: 0.06em;
+      color: var(--text-color-light);
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    /* ===== POST TITLE ===== */
+    .post-title {
+      font-family: var(--second-font);
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--title-color);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp .8s .3s forwards;
+    }
+
+    .post-title .highlight {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--first-color);
+    }
+
+    /* ===== LEAD / INTRO ===== */
+    .post-lead {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-color);
+      border-left: 2px solid var(--first-color);
+      padding-left: 1.25rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp .8s .4s forwards;
+    }
+
+    /* ===== HERO IMAGE ===== */
+    .post-hero-img {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin-bottom: 3.5rem;
+      position: relative;
+      opacity: 0;
+      animation: fadeUp .8s .5s forwards;
+    }
+
+    .post-hero-img img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .post-hero-img .img-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: .75rem 1.25rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      font-size: .72rem;
+      letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ===== POST BODY ===== */
+    .post-body {
+      opacity: 0;
+      animation: fadeUp .8s .55s forwards;
+    }
+
+    .post-body h2 {
+      font-family: var(--second-font);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--title-color);
+      margin: 2.5rem 0 1rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .post-body h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1em;
+      border-radius: 2px;
+      background: var(--first-color);
+      flex-shrink: 0;
+    }
+
+    .post-body p {
+      font-size: .92rem;
+      line-height: 1.9;
+      color: var(--text-color);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ===== CALLOUT / HIGHLIGHT BOX ===== */
+    .callout {
+      background: linear-gradient(135deg, hsl(var(--hue), 20%, 8%), var(--container-color));
+      border: 1px solid hsla(var(--hue), 60%, 64%, 0.2);
+      border-left: 3px solid var(--first-color);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      margin: 2rem 0;
+      position: relative;
+    }
+
+    .callout__icon {
+      font-size: 1.1rem;
+      color: var(--first-color);
+      margin-bottom: .5rem;
+    }
+
+    .callout p {
+      font-size: .88rem;
+      line-height: 1.75;
+      color: var(--text-color);
+      margin-bottom: 0;
+    }
+
+    /* ===== SKILL GRID ===== */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin: 1.75rem 0;
+    }
+
+    .skill-item {
+      background: var(--container-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      transition: border-color .3s, transform .3s;
+    }
+
+    .skill-item:hover {
+      border-color: var(--first-color);
+      transform: translateY(-3px);
+    }
+
+    .skill-item__icon {
+      font-size: 1.3rem;
+      color: var(--first-color);
+      margin-bottom: .5rem;
+    }
+
+    .skill-item__name {
+      font-family: var(--second-font);
+      font-size: .65rem;
+      font-weight: 700;
+      color: var(--title-color);
+      letter-spacing: 0.04em;
+      margin-bottom: .2rem;
+    }
+
+    .skill-item__desc {
+      font-size: .7rem;
+      color: var(--text-color-light);
+      line-height: 1.5;
+    }
+
+    /* ===== PROGRESS BARS ===== */
+    .progress-section {
+      background: var(--container-color);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin: 2rem 0;
+    }
+
+    .progress-section h3 {
+      font-family: var(--second-font);
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--title-color);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    .progress-item {
+      margin-bottom: 1.1rem;
+    }
+
+    .progress-item:last-child { margin-bottom: 0; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: .4rem;
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    .progress-track {
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(to right, var(--first-color), var(--first-color-light));
+      width: 0%;
+      transition: width 1.4s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    /* ===== TAGS ===== */
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .tag {
+      font-size: .68rem;
+      font-weight: 500;
+      color: var(--text-color-light);
+      padding: .3rem .85rem;
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      transition: all .3s;
+      cursor: pointer;
+    }
+
+    .tag:hover {
+      border-color: var(--first-color);
+      color: var(--first-color);
+    }
+
+    /* ===== RELATED ENTRIES ===== */
+    .related-section {
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border-color);
+      opacity: 0;
+      animation: fadeUp .8s .7s forwards;
+    }
+
+    .related-label {
+      font-family: var(--second-font);
+      font-size: .65rem;
+      font-weight: 700;
+      color: var(--first-color);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .related-label::before { content: '✦'; font-size: .55rem; }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .related-card {
+      background: var(--container-color);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: border-color .3s, transform .3s;
+      cursor: pointer;
+    }
+
+    .related-card:hover {
+      border-color: var(--first-color);
+      transform: translateY(-4px);
+    }
+
+    .related-card__meta {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: .85rem;
+    }
+
+    .related-card__date {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-color-light);
+    }
+
+    .related-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .2rem .65rem;
+      border-radius: 100px;
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .badge--life-sm {
+      background: hsla(140, 60%, 55%, 0.12);
+      color: hsl(140, 60%, 65%);
+      border: 1px solid hsla(140, 60%, 55%, 0.25);
+    }
+
+    .badge--milestone-sm {
+      background: hsla(var(--hue), 60%, 64%, 0.12);
+      color: var(--first-color);
+      border: 1px solid hsla(var(--hue), 60%, 64%, 0.25);
+    }
+
+    .related-card__title {
+      font-family: var(--second-font);
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--title-color);
+      line-height: 1.35;
+    }
+
+    /* ===== SCROLL TOP ===== */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 3rem; height: 3rem;
+      border-radius: 50%;
+      background: var(--first-color);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .3s;
+      z-index: 50;
+    }
+
+    .scroll-top.show { opacity: 1; transform: translateY(0); }
+    .scroll-top:hover { background: var(--first-color-alt); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .header__nav { display: none; }
+      .post-hero-img img { height: 240px; }
+      .skill-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .skill-grid { grid-template-columns: 1fr; }
+      .post-title { font-size: 1.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="ambient-glow"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="../../index.html" class="header__logo">Justie</a>
+    <nav class="header__nav">
+      <a href="../../index.html">Home</a>
+      <a href="../../index.html#projects">Projects</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+    <a href="../blog-whats-new/blog-whats-new-template.html" class="back-btn">
+      <i class="ri-arrow-left-line"></i> Back
+    </a>
+  </header>
+
+  <!-- Main Post -->
+  <main class="post-wrapper">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="../blog-whats-new/blog-whats-new-template.html">Home</a>
+      <i class="ri-arrow-right-s-line"></i>
+      <a href="../blog-whats-new/blog-whats-new-template.html">What's New</a>
+      <i class="ri-arrow-right-s-line"></i>
+      <span>Pride</span>
+    </nav>
+
+    <!-- Meta Row -->
+    <div class="post-meta-row">
+      <span class="entry-date">June 2026</span>
+      <span class="entry-badge entry-badge--pride"><i class="ri-rainbow-line"></i> Pride</span>
+      <span class="read-time"><i class="ri-time-line"></i> 5 min read</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="post-title">
+      Being Me — A Tribute to<br>
+      <span class="highlight">My Pride & My Advocacy</span>
+    </h1>
+
+    <!-- Lead -->
+    <p class="post-lead">
+      Pride Month has always meant more to me than parades and rainbow filters. It's a reminder of how far I've come in owning who I am, and of the work I've chosen to carry — for HIV awareness, for gender-based rights, for a community that deserves to be seen, safe, and celebrated all year round.
+    </p>
+
+    <!-- Hero Image -->
+    <div class="post-hero-img">
+      <img src="https://scontent.fmnl14-1.fna.fbcdn.net/v/t39.99422-6/735525391_1486272546138343_5336533620707316045_n.png?stp=dst-jpg_tt6&cstp=mx2048x1365&ctp=s2048x1365&_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHaMAPUxQ9zGy4oit3MYKELV-R-auGB4lNX5H5q4YHiUxhbKmoJrOYVAloy-qgzvmG0wUPNqX7X0Ex73oVzYoXR&_nc_ohc=QXoXIzMaPVQQ7kNvwEGHHZh&_nc_oc=Adrou9Lj8S1om_kEqMcgpi4mu96Y-IYAUlSLIwyRv616i43yGHUVHzT-YaWsMC1VCHE&_nc_zt=14&_nc_ht=scontent.fmnl14-1.fna&_nc_gid=XfCAD2_Dm29dJvczeq0Dig&_nc_ss=7b2a8&oh=00_AQBJ6L4gOOJ3nmbSCZVbIM9ag8iVNnaNMf0yCeYZTTb04Q&oe=6A514285" alt="Pride Month tribute cover photo">
+      <div class="img-caption">This is me — showing up fully, unapologetically, for Pride and for the people I fight for.</div>
+    </div>
+
+    <div class="pride-rule"></div>
+
+    <!-- Body Content -->
+    <div class="post-body">
+
+      <h2>This is me</h2>
+      <p>
+        For a long time, being part of the LGBTQ+ community meant learning to take up space in rooms that weren't always built for me. Pride Month is a yearly reminder of that journey — of the fear I had to unlearn, the people who made it safer to be myself, and the version of me who finally stopped shrinking.
+      </p>
+      <p>
+        I don't just show up for Pride once a year. I show up for it in the work I do, the conversations I start, and the spaces I try to make a little more open for the next person still figuring themselves out.
+      </p>
+
+      <div class="post-hero-img" style="margin: 2rem 0;">
+        <img src="https://scontent.fmnl14-2.fna.fbcdn.net/v/t39.30808-6/480204257_122193694664089422_7192396759727662315_n.jpg?stp=dst-jpg_tt6&cstp=mx1638x2048&ctp=s1638x2048&_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE4RBeHGIymbjGpk8VKPeDZ7hN7T3Ux-5nuE3tPdTH7mfOJxS4FJvHyHAQ6ktWDkt7mUM2TikdTuq11wXm_7otX&_nc_ohc=M398Q--TqNAQ7kNvwGlo8gM&_nc_oc=AdpuYgDb-YG9eEwI0bp-fMrWpsCw0Wv_8V_qpePZHOHmjCS3IW3ujuhHEmBtRMrr5K0&_nc_zt=23&_nc_ht=scontent.fmnl14-2.fna&_nc_gid=hgTs5TINdMR1CWp5axx7BA&_nc_ss=7b2a8&oh=00_AQDLHdvL_XfX2Ewa_Eeh3uGJvnP3RRFJU4-S_NzSo44fVQ&oe=6A515618" alt="Pride Month advocacy moment">
+        <div class="img-caption">Standing in spaces I once thought weren't for me.</div>
+      </div>
+
+      <div class="callout">
+        <div class="callout__icon"><i class="ri-heart-3-line"></i></div>
+        <p>
+          Being visible isn't always comfortable, but it's necessary. Every time someone sees me living openly, it chips away a little more at the silence that used to protect no one but the discomfort of others.
+        </p>
+      </div>
+
+      <h2>Why I fight</h2>
+      <p>
+        Advocacy found me the same way most important things do — through people I love getting hurt by systems that weren't built to protect them. Fighting for LGBTQ+ rights isn't abstract to me. It's about the friend who was denied basic respect at a clinic, the sibling still hiding from family, the coworker who has to think twice before mentioning their partner.
+      </p>
+      <p>
+        So I fight where I can — in conversations, in the organizations I'm part of, in the platforms I have access to, and now, in the corner of the internet that is this blog.
+      </p>
+
+      <div class="post-hero-img" style="margin: 2rem 0;">
+        <img src="https://scontent.fmnl14-2.fna.fbcdn.net/v/t39.30808-6/480438591_122193974714089422_2992728355883008289_n.jpg?stp=dst-jpg_tt6&cstp=mx800x533&ctp=s800x533&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEeBMx7cRqGFfpi_meBTJk1UaScKz-vq0JRpJwrP6-rQqJQjvHz3n-pqeb384DYtOMj9t_RvqLPR8bDGh_c8YW2&_nc_ohc=ZYb0f1_tO_kQ7kNvwGQzI_M&_nc_oc=AdoJW5-kVHIIE6WvEtmOV6gNLm2n1S29uyRjQuSKUlcwsBzD_WVkRV2PsA4DDDQdG64&_nc_zt=23&_nc_ht=scontent.fmnl14-2.fna&_nc_gid=s2Fiu3hr1ApSjOHDiZ1HSQ&_nc_ss=7b2a8&oh=00_AQCG9MLYR70amvgR8Z4I-UvZaer_kfLQWj_hoU1h_1zXSg&oe=6A516CC6" alt="Community advocacy event">
+        <div class="img-caption">Community work — where the real advocacy happens.</div>
+      </div>
+
+      <h2>Raising HIV awareness</h2>
+      <p>
+        One of the causes closest to my heart is HIV awareness. Stigma still keeps people from getting tested, from seeking treatment, from even talking about it — and silence has never once made anyone safer. Part of my advocacy is making sure the people around me know that testing is normal, that treatment works, that a diagnosis is not a life sentence, and that no one deserves to be shamed for their status.
+      </p>
+
+      <div class="skill-grid">
+        <div class="skill-item">
+          <div class="skill-item__icon"><i class="ri-shield-cross-line"></i></div>
+          <div class="skill-item__name">Awareness</div>
+          <div class="skill-item__desc">Normalizing testing & open conversation</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__icon"><i class="ri-book-open-line"></i></div>
+          <div class="skill-item__name">Education</div>
+          <div class="skill-item__desc">Sharing accurate, stigma-free information</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__icon"><i class="ri-hand-heart-line"></i></div>
+          <div class="skill-item__name">Support</div>
+          <div class="skill-item__desc">Being a safe space for those affected</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-item__icon"><i class="ri-scales-3-line"></i></div>
+          <div class="skill-item__name">Gender Rights</div>
+          <div class="skill-item__desc">Pushing for equal treatment for all</div>
+        </div>
+      </div>
+
+      <div class="post-hero-img" style="margin: 2rem 0;">
+        <img src="https://scontent.fmnl14-2.fna.fbcdn.net/v/t39.30808-6/480032505_122193982148089422_1929779362548447524_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1364&ctp=s590x590&_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFD8lMsouX_JlMbq9GjRxasvrEH5Prfnpi-sQfk-t-emKxjTUw4_lXwxRzkbB_UKEDVCBRjchDjuG1J4axAxZK7&_nc_ohc=Nk97082jGDQQ7kNvwFGn6Bi&_nc_oc=AdrYj_NqZBvOPhUouuxTV0ifEk-YDHhjZ62w1n9n7RVcu9gnUdIcRE2sp8JLkj8K7C4&_nc_zt=23&_nc_ht=scontent.fmnl14-2.fna&_nc_gid=yJVKty522koqbhpB1kYcig&_nc_ss=7b2a8&oh=00_AQB6lKu5o-tM4G_AAZHe-lOcVkTCAzYeuXM90k9lJNP1qA&oe=6A515629" alt="HIV awareness advocacy">
+        <div class="img-caption">Talking openly about HIV — because silence is the real danger.</div>
+      </div>
+
+      <h2>Gender-based rights for all</h2>
+      <p>
+        My advocacy doesn't stop at my own identity. Gender-based rights are human rights — full stop. That means fighting against discrimination based on gender identity or expression, pushing for policies that protect everyone regardless of who they are or who they love, and reminding people that equality isn't a favor being granted, it's something owed.
+      </p>
+      <p>
+        This work is for the people who came before me and made it a little safer for someone like me to exist loudly, and for everyone still waiting for the world to catch up.
+      </p>
+
+      <div class="post-hero-img" style="margin: 2rem 0;">
+        <img src="https://scontent.fmnl14-1.fna.fbcdn.net/v/t39.30808-6/486707498_122199790988089422_8347205674683715897_n.jpg?stp=dst-jpg_tt6&cstp=mx800x533&ctp=s800x533&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHo68Tol_aRRnmE_rNL3uozbQKqV2OuBX1tAqpXY64FfdjXMy3gSDyRFxOHVRyOofXOccRL4ZWD5rxqfkRhXi2W&_nc_ohc=poJYQPT_cfsQ7kNvwHgR2hg&_nc_oc=Adppq1BNYHzoRTX9X6H80SmANNP8UwNNavu29b1FsPgiooaYDEEllqLyoLcWQ3XkOlw&_nc_zt=23&_nc_ht=scontent.fmnl14-1.fna&_nc_gid=pzNuy6dXPVhP1mrFRiVCgQ&_nc_ss=7b2a8&oh=00_AQD1FBtMzvvz1JPRHJsWr4Nb9eTLLP1ZyD7K8qMyUMxNHA&oe=6A51717B" alt="Gender rights advocacy">
+        <div class="img-caption">Fighting for rights that should never have been up for debate.</div>
+      </div>
+
+      <h2>Pride is protest and celebration</h2>
+      <p>
+        I think that's what I love most about Pride Month — it holds both truths at once. It's a party and a protest. A celebration of how far we've come, and a loud reminder of how far there still is to go. I get to be both proud and unfinished, both joyful and still fighting.
+      </p>
+
+      <div class="post-hero-img" style="margin: 2rem 0;">
+        <img src="https://scontent.fmnl14-1.fna.fbcdn.net/v/t39.99422-6/734685266_1758202075540233_8738173785075560867_n.png?stp=dst-jpg_tt6&cstp=mx2048x1365&ctp=s2048x1365&_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHgQp2hRY3F5z6jk2CRt8Mz5XgBNFgBssnleAE0WAGyyTvBlSsnd-G1omYuT89TM1bwETZD2aJFa55dDz-fh0Q9&_nc_ohc=9SqQzdD_T7AQ7kNvwGVsr7a&_nc_oc=AdrUVNT0JLarYQgjy3lY1eYJzewFETHKon1xSg1B8oxFdxJakyQpHoYzL7-g0APfSck&_nc_zt=14&_nc_ht=scontent.fmnl14-1.fna&_nc_gid=h3bVi-Phl0k-xhzsqzrIKQ&_nc_ss=7b2a8&oh=00_AQAXq_9jAJw9X1Mg3J5pL3K5TbY2sQlJegSknZYb4Odj-g&oe=6A5158A5" alt="Pride celebration">
+        <div class="img-caption">Joyful, proud, and still fighting.</div>
+      </div>
+
+      <h2>What's next</h2>
+      <p>
+        This blog entry is just one more way of being loud about who I am and what I stand for. I'll keep showing up for HIV awareness campaigns, keep pushing conversations on gender-based rights, and keep making sure the people around me know they don't have to hide to be loved. Pride doesn't end with June — it just gets to be a little louder.
+      </p>
+
+      <!-- Tags -->
+      <div class="post-tags">
+        <span class="tag">Pride Month</span>
+        <span class="tag">LGBTQ+</span>
+        <span class="tag">Advocacy</span>
+        <span class="tag">HIV Awareness</span>
+        <span class="tag">Gender Rights</span>
+        <span class="tag">Equality</span>
+      </div>
+    </div>
+
+    <!-- Related Entries -->
+    <div class="related-section">
+      <div class="related-label">More Entries</div>
+      <div class="related-grid">
+        <div class="related-card">
+          <div class="related-card__meta">
+            <span class="related-card__date">April 2026</span>
+            <span class="related-badge badge--life-sm"><i class="ri-briefcase-line"></i> Life</span>
+          </div>
+          <div class="related-card__title">JG Worldwide Internship — Stepping Into the Real World</div>
+        </div>
+        <div class="related-card">
+          <div class="related-card__meta">
+            <span class="related-card__date">2025</span>
+            <span class="related-badge badge--life-sm"><i class="ri-heart-line"></i> Life</span>
+          </div>
+          <div class="related-card__title">"Carrying More Than I Thought I Could"</div>
+        </div>
+        <div class="related-card">
+          <div class="related-card__meta">
+            <span class="related-card__date">2025</span>
+            <span class="related-badge badge--milestone-sm"><i class="ri-trophy-line"></i> Milestone</span>
+          </div>
+          <div class="related-card__title">Most Active Governance Awardee — Gawad Batang Bayani 2025</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Scroll Top -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="ri-arrow-up-line"></i>
+  </button>
+
+  <script>
+    // Progress bar
+    window.addEventListener('scroll', () => {
+      const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('progressBar').style.width = scrolled + '%';
+      const btn = document.getElementById('scrollTop');
+      if (window.scrollY > 300) btn.classList.add('show');
+      else btn.classList.remove('show');
+    });
+
+  </script>
+</body>
+</html>

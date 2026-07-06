@@ -312,6 +312,12 @@
       border: 1px solid hsla(35, 90%, 60%, 0.3);
     }
 
+    .badge--pride {
+      background: linear-gradient(90deg, hsla(0,85%,60%,.18), hsla(45,90%,58%,.18), hsla(140,60%,55%,.18), hsla(200,85%,60%,.18), hsla(265,70%,65%,.18));
+      color: hsl(320, 70%, 78%);
+      border: 1px solid hsla(320, 70%, 65%, 0.35);
+    }
+
     .entry-new-pill {
       display: inline-flex;
       align-items: center;
@@ -664,6 +670,7 @@
       <button class="filter-tab" data-filter="milestone">Milestone</button>
       <button class="filter-tab" data-filter="update">Update</button>
       <button class="filter-tab" data-filter="life">Life</button>
+      <button class="filter-tab" data-filter="pride">Pride</button>
       <button class="filter-tab" data-filter="new">New</button>
     </div>
   </div>
@@ -677,34 +684,62 @@
 
       <ul class="entries-list">
 
-        <!-- Entry: Featured / Latest — Life -->
-        <li data-category="life" class="reveal">
-          <a href="blog-2026-internship.html" class="entry-card-link">
+        <!-- Entry: Featured / Latest — Pride -->
+        <li data-category="pride" class="reveal">
+          <a href="blog-2026-pride.html" class="entry-card-link">
             <div class="entry-card entry-card--featured entry-card--wide">
               <div class="entry-inner">
                 <div>
                   <div class="entry-header">
                     <div class="entry-meta">
-                      <span class="entry-date">April 2026</span>
-                      <span class="entry-badge badge--life"><i class="ri-briefcase-line"></i> Life</span>
+                      <span class="entry-date">June 2026</span>
+                      <span class="entry-badge badge--pride"><i class="ri-rainbow-line"></i> Pride</span>
                     </div>
                     <span class="entry-new-pill">● New</span>
                   </div>
-                  <h3 class="entry-title">JG Worldwide Internship — Stepping Into the Real World</h3>
+                  <h3 class="entry-title">Being Me — A Pride Month Tribute to My Advocacy</h3>
                   <p class="entry-body">
-                    Funny enough, this feels like 2023 again — parang freshman ulit — but this time, mas aware na ako. My internship at JG Worldwide taught me so much, not just about work but about myself. The people I met, the lessons I picked up… it made me realize I'm slowly stepping into the life I've been working hard for.
+                    Pride Month is more than a celebration for me — it's a reflection of my journey as part of the LGBTQ+ community and everything I fight for: HIV awareness, gender-based rights, and a world where no one has to hide to be loved.
                   </p>
                   <div class="entry-tags">
-                    <span class="entry-tag">Internship</span>
-                    <span class="entry-tag">JG Worldwide</span>
-                    <span class="entry-tag">Growth</span>
+                    <span class="entry-tag">Pride Month</span>
+                    <span class="entry-tag">LGBTQ+</span>
+                    <span class="entry-tag">HIV Awareness</span>
+                    <span class="entry-tag">Gender Rights</span>
                   </div>
                   <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
                 </div>
                 <div class="entry-image">
-                  <img src="img/jgw.jpg" alt="JG Worldwide Internship">
+                  <img src="https://scontent.fmnl14-1.fna.fbcdn.net/v/t39.99422-6/735525391_1486272546138343_5336533620707316045_n.png?stp=dst-jpg_tt6&cstp=mx2048x1365&ctp=s2048x1365&_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHaMAPUxQ9zGy4oit3MYKELV-R-auGB4lNX5H5q4YHiUxhbKmoJrOYVAloy-qgzvmG0wUPNqX7X0Ex73oVzYoXR&_nc_ohc=QXoXIzMaPVQQ7kNvwEGHHZh&_nc_oc=Adrou9Lj8S1om_kEqMcgpi4mu96Y-IYAUlSLIwyRv616i43yGHUVHzT-YaWsMC1VCHE&_nc_zt=14&_nc_ht=scontent.fmnl14-1.fna&_nc_gid=XfCAD2_Dm29dJvczeq0Dig&_nc_ss=7b2a8&oh=00_AQBJ6L4gOOJ3nmbSCZVbIM9ag8iVNnaNMf0yCeYZTTb04Q&oe=6A514285" alt="Pride Month tribute">
                 </div>
               </div>
+            </div>
+          </a>
+        </li>
+
+        <!-- Entry: Life -->
+        <li data-category="life" class="reveal" style="transition-delay:.1s">
+          <a href="blog-2026-internship.html" class="entry-card-link">
+            <div class="entry-card">
+              <div class="entry-header">
+                <div class="entry-meta">
+                  <span class="entry-date">April 2026</span>
+                  <span class="entry-badge badge--life"><i class="ri-briefcase-line"></i> Life</span>
+                </div>
+              </div>
+              <h3 class="entry-title">JG Worldwide Internship — Stepping Into the Real World</h3>
+              <p class="entry-body">
+                Funny enough, this feels like 2023 again — parang freshman ulit — but this time, mas aware na ako. My internship at JG Worldwide taught me so much, not just about work but about myself. The people I met, the lessons I picked up… it made me realize I'm slowly stepping into the life I've been working hard for.
+              </p>
+              <div class="entry-tags">
+                <span class="entry-tag">Internship</span>
+                <span class="entry-tag">JG Worldwide</span>
+                <span class="entry-tag">Growth</span>
+              </div>
+              <div class="entry-image">
+                <img src="img/jgw.jpg" alt="JG Worldwide Internship">
+              </div>
+              <span class="entry-read-more">Read Entry <i class="ri-arrow-right-line"></i></span>
             </div>
           </a>
         </li>
@@ -974,7 +1009,7 @@
   <!-- Footer -->
   <footer class="footer">
     <span>© 2026 Portfolio. All rights reserved.</span>
-    <span>Updated May 2025 ✦</span>
+    <span>Updated June 2026 ✦</span>
   </footer>
 
   <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
